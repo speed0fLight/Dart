@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -41,10 +42,31 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void updateText() {
+  // return a raw string from a request
+  Future<String> fetchVehicleList() async {
+    try {
+      final response = await http.get(Uri.parse('http://127.0.0.1:3000/api/data'));
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return 'Error: ${response.statusCode}';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
+  }
+
+  // this method fetches an api for cars
+  Future<void> showPrices() async {
+    // loading thing
     setState(() {
-      // Set the label to the text controller's value
-      labelText = "Shout!";
+      labelText = 'Loading Api....';
+    });
+    // do the work
+    String raw = await fetchVehicleList();
+    setState(() {
+      // Post it
+      labelText = raw;
     });
   }
 
@@ -54,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(title: const Text('By Justin N')),
       body: HomepageContent(
         countCallback: incrementCounter,
-        shoutCallback: updateText,
+        shoutCallback: showPrices,
         labelText: labelText,
       ),
     );
