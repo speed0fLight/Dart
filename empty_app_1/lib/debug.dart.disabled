@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+
+// This function calls 'runApp'
+void main() {
+  runApp(const testApp());
+}
+
+class testApp extends StatelessWidget {
+  const testApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+    home: Scaffold(
+      body: Center(
+        child: Text("Hi!")
+      ),
+    ),
+  );
+  }
+}
